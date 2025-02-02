@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react"
 import { ImageIcon, Smile, X } from "lucide-react"
 import { Button } from "./common/button"

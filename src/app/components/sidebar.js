@@ -1,3 +1,4 @@
+"use client"
 import { Bell, Home, MessageCircle, Search, User } from "lucide-react";
 import { Button } from "./common/button";
 import Card from "./ui/card/card";

@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+"use client"
 import { Bell, MessageCircle, Search, Menu } from "lucide-react";
 import { Avatar } from "./ui/avatar/avatar";
 import AvatarFallback from "./ui/avatar/avatarFallback";
@@ -8,8 +9,12 @@ import { Input } from "./common/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuSubContent, DropdownMenuTrigger, DropdownMenuItem } from "./ui/dropdownMenu/dropdown-menu";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription,SheetHeader, SheetFooter } from "./ui/sheet/sheetPremiun";
 import Sidebar from "./sidebar";
+import { useRouter } from "next/navigation";
 
     const NavBar = () => {
+       
+        const navigate = useRouter();
+        const user = JSON.parse(localStorage.getItem("user"));
         return (
             <nav className="bg-white  shadow-md top-0 z-10">
               <div className="max-w-6xl mx-auto px-4">
@@ -68,7 +73,7 @@ import Sidebar from "./sidebar";
                        </Avatar>
                      </DropdownMenuTrigger>
                      <DropdownMenuContent align="end">
-                       <DropdownMenuItem>
+                       <DropdownMenuItem onSelect={() => navigate.push(`/socialNet/${user?.userID}`)} >
                          Perfil
                        </DropdownMenuItem>
                        <DropdownMenuItem>

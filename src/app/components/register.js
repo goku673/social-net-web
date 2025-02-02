@@ -1,37 +1,42 @@
+"use client"
 import React, { useState } from "react"
 import { Button } from "./common/button";
 import { Input } from "./common/input";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "./ui/card/cardpremiun";
 import { Icons } from "./icons/icons";
-
-const inputFieldsRegister = [
-  { name: "username", type: "text", placeholder: "Nombre de usuario" },
-  { name: "email", type: "email", placeholder: "Correo electrónico" },
-  { name: "password", type: "password", placeholder: "Contraseña" },
-  { name: "confirmPassword", type: "password", placeholder: "Confirmar contraseña" },
-]
+import Link from "next/link";
+import { inputFieldsRegister } from "./utils/formUtils";
+import { useRegisterMutation } from "@/redux/auth/auth";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const navigation = useRouter();
   const [formData, setFormData] = useState({
-    username: "",
+    nombre: "",
     email: "",
     password: "",
     confirmPassword: "",
+    imagen: null,
   })
-
-  const [isLoading, setIsLoading] = useState(false);
+  
+  const [ register, { isLoading : registerLoading }] = useRegisterMutation();
+ 
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setFormData({ ...formData, [e.target.name]: e.target.type === "file" ? e.target.files[0] : e.target.value });
   }
 
   const handleSubmit = async (e) => {
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
     e.preventDefault()
-    setIsLoading(true)
-    // Simular una petición de registro
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log("Datos de registro:", formData)
-    setIsLoading(false)
+    //console.log(formData);
+   const response = await register(data);
+   localStorage.setItem('user', JSON.stringify(response.data))
+    navigation.push("/");
+
   }
 
   return (
@@ -43,12 +48,17 @@ const Register = () => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           {inputFieldsRegister.map((field) => (
-            <div key={field.name} className="space-y-2">
-              <label htmlFor={field.name}>{field.label}</label>
+            <div key={field.label} className="space-y-2">
+              <label 
+                htmlFor={field.label}
+              >
+                {field.label}
+              </label>
               <Input
-                id={field.name}
+                key={field.label}
+                id={field.label}
                 type={field.type}
-                name={field.name}
+                name={field.label}
                 placeholder={field.placeholder}
                 value={formData[field.name]}
                 onChange={handleChange}
@@ -60,10 +70,10 @@ const Register = () => {
           <Button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
-            disabled={isLoading}
+            disabled={registerLoading}
           >
-            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? "Registrando..." : "Registrarse"}
+            {registerLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            {registerLoading? "Registrando..." : "Registrarse"}
           </Button>
         </form>
       </CardContent>
@@ -81,16 +91,12 @@ const Register = () => {
             <Icons.google className="mr-2 h-4 w-4" />
             Google
           </Button>
-          <Button variant="outline" className="w-full">
-            <Icons.facebook className="mr-2 h-4 w-4" />
-            Facebook
-          </Button>
         </div>
         <p className="text-center text-sm text-gray-600">
           ¿Ya tienes una cuenta?{" "}
-          <a href="#" className="text-blue-600 hover:underline font-medium">
+          <Link href="/" className="text-blue-600 hover:underline font-medium">
             Inicia sesión
-          </a>
+          </Link>
         </p>
       </CardFooter>
     </Card>

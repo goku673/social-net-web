@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { Bell, Home, ImageIcon, Search, User } from "lucide-react"
 import { Button } from "./common/button"

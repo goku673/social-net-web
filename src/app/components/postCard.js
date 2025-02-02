@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { Heart, MessageCircle, MoreHorizontal, Share2 } from "lucide-react"
 import { Button } from "./common/button";

@@ -8,12 +8,19 @@ import NavBar from "./components/navBar";
 import Sidebar from "./components/sidebar";
 import RightSidebar from "./components/rightBar";
 import SocialNetwork from "./components/screens/socialNetwork";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
   const  Home = () => {
-   
+   const navigate = useRouter();
+   useEffect(() => {
+     const user = localStorage.getItem("user");
+     user ? navigate.push("/socialNet") : ""
+   }, [navigate]);
+
     return (
-      <div>
-       <SocialNetwork/>
+      <div className="pt-56">
+        <Login/>
       </div>
     );
   }
