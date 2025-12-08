@@ -11,7 +11,7 @@ jobs:
       - name: Bajar codigo
         uses: actions/checkout@v4
 
-      # 1. Loguearse en Docker Hub
+      # 1. Loguearse en Docker Hub -- necesario para subir la imagen
       - name: Login Docker Hub
         uses: docker/login-action@v3
         with:
