@@ -1,0 +1,54 @@
+name: CD - Despliegue a produccion
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bajar codigo
+        uses: actions/checkout@v4
+
+      # 1. Loguearse en Docker Hub
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 2. Construir la imagen y subirla (Push)
+      - name: Construir y subir imagen Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # AQUI ELEGIMOS EL NOMBRE: social-net-web
+          tags: ${{ secrets.DOCKER_USERNAME }}/social-net-web:latest
+
+      # 3. Conectar al servidor y ejecutar comandos
+      - name: Desplegar en EC2
+        uses: appleboy/ssh-action@v1.0.3 # <--- CAMBIO IMPORTANTE: ssh-action
+        with:
+          host: ${{ secrets.HOST_DNS }} # Asegurate que tu secreto se llame asi (o EC2_HOST)
+          username: ec2-user # O el usuario que uses (ubuntu/ec2-user)
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Definimos variables para no equivocarnos con los nombres
+            CONTAINER_NAME="social-net-web"
+            IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/social-net-web:latest"
+
+            # Parar el contenedor viejo
+            docker stop $CONTAINER_NAME || true
+            docker rm $CONTAINER_NAME || true
+
+            # Borrar imagen vieja para ahorrar espacio
+            docker rmi $IMAGE_NAME || true
+
+            # Bajar la nueva imagen (la que acabamos de subir arriba)
+            docker pull $IMAGE_NAME
+
+            # Arrancar el nuevo contenedor
+            # Si usas secreto para el puerto cambialo aqui, si no deja 3000
+            docker run -d -p 3000:3000 --name $CONTAINER_NAME --restart always $IMAGE_NAME
