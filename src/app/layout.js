@@ -1,31 +1,17 @@
-"use client"
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Provider } from "react-redux";
-import store from "@/redux/store";
-import { metadata } from "./metadata";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+'use client';
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import './globals.css';
+import { Provider } from 'react-redux';
+import store from '@/redux/store';
 
-
+import { MONTSERRAT } from './lib/fonts';
 
 export default function RootLayout({ children }) {
   return (
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <Provider store={store}>
-          {children}
-          </Provider>
-        </body>
-      </html>
+    <html lang="en">
+      <body className={`${MONTSERRAT.className}`}>
+        <Provider store={store}>{children}</Provider>
+      </body>
+    </html>
   );
 }
