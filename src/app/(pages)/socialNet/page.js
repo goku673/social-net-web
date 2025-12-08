@@ -1,11 +1,11 @@
-import SocialNetwork from "@/app/components/screens/socialNetwork"
+import SocialNetwork from '@/app/components/screens/socialNetwork';
 
 const SocialNet = () => {
   return (
     <div>
-      <SocialNetwork/>
+      <SocialNetwork />
     </div>
-  )
-}
+  );
+};
 
-export default SocialNet
+export default SocialNet;
