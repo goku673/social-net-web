@@ -1,27 +1,37 @@
-name : CI - Calidad y pruebas
-on :
-  push: 
-    branches: ["main","dev","ft/*"]
+name: CI - Calidad y pruebas
+
+on:
+  push:
+    branches: ['main', 'dev', 'ft/*']
   pull_request:
-    branches: ["main"]
-jobs :
+    branches: ['main']
+
+jobs:
   check-code:
     runs-on: ubuntu-latest
     steps:
       - name: Bajar codigo
         uses: actions/checkout@v4
 
+      # CAMBIO 1: Actualizamos la acción a v4 (más moderna)
+      # CAMBIO 2: Ponemos version 10 para que coincida con tu PC
       - name: Instalar pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
       - name: Revisar Calidad (lint)
-        run : pnpm lint
+        run: pnpm lint
 
+      # Este paso está perfecto para verificar que el Dockerfile no explote
       - name: Probar contruccion de Docker (sin subir)
-        run : docker build .
-        
-
+        run: docker build .
