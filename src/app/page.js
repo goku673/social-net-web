@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 const Home = () => {
   const navigate = useRouter();
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    //const user = localStorage.getItem('user');
     //user ? navigate.push("/socialNet") : ""
   }, [navigate]);
 
