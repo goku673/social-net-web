@@ -1,59 +1,67 @@
-"use client"
-import React, { useState } from "react"
-import { Button } from "./common/button";
-import { Input } from "./common/input";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "./ui/card/cardpremiun";
-import { Icons } from "./icons/icons";
-import Link from "next/link";
-import { inputFieldsRegister } from "./utils/formUtils";
-import { useRegisterMutation } from "@/redux/auth/auth";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useState } from 'react';
+import { Button } from './common/button';
+import { Input } from './common/input';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from './ui/card/cardpremiun';
+import { Icons } from './icons/icons';
+import Link from 'next/link';
+import { inputFieldsRegister } from './utils/formUtils';
+import { useRegisterMutation } from '@/redux/auth/auth';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
   const navigation = useRouter();
   const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    nombre: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     imagen: null,
-  })
-  
-  const [ register, { isLoading : registerLoading }] = useRegisterMutation();
- 
+  });
+
+  const [register, { isLoading: registerLoading }] = useRegisterMutation();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.type === "file" ? e.target.files[0] : e.target.value });
-  }
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.type === 'file' ? e.target.files[0] : e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     const data = new FormData();
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-    e.preventDefault()
+    e.preventDefault();
     //console.log(formData);
-   const response = await register(data);
-   localStorage.setItem('user', JSON.stringify(response.data))
-    navigation.push("/");
-
-  }
+    const response = await register(data);
+    localStorage.setItem('user', JSON.stringify(response.data));
+    //navigation.push("/");
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white shadow-lg border border-gray-100">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center text-gray-800">Únete a SocialNet</CardTitle>
-        <p className="text-sm text-center text-gray-500">Crea tu cuenta y conecta con amigos</p>
+        <CardTitle className="text-2xl font-bold text-center text-gray-800">
+          Únete a SocialNet
+        </CardTitle>
+        <p className="text-sm text-center text-gray-500">
+          Crea tu cuenta y conecta con amigos
+        </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           {inputFieldsRegister.map((field) => (
             <div key={field.label} className="space-y-2">
-              <label 
-                htmlFor={field.label}
-              >
-                {field.label}
-              </label>
+              <label htmlFor={field.label}>{field.label}</label>
               <Input
                 key={field.label}
                 id={field.label}
@@ -72,8 +80,10 @@ const Register = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
             disabled={registerLoading}
           >
-            {registerLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            {registerLoading? "Registrando..." : "Registrarse"}
+            {registerLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {registerLoading ? 'Registrando...' : 'Registrarse'}
           </Button>
         </form>
       </CardContent>
@@ -83,7 +93,9 @@ const Register = () => {
             <span className="w-full border-t border-gray-200" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">O regístrate con</span>
+            <span className="px-2 bg-white text-gray-500">
+              O regístrate con
+            </span>
           </div>
         </div>
         <div className="flex space-x-2">
@@ -93,15 +105,14 @@ const Register = () => {
           </Button>
         </div>
         <p className="text-center text-sm text-gray-600">
-          ¿Ya tienes una cuenta?{" "}
+          ¿Ya tienes una cuenta?{' '}
           <Link href="/" className="text-blue-600 hover:underline font-medium">
             Inicia sesión
           </Link>
         </p>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default Register
-
+export default Register;
