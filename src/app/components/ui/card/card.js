@@ -1,12 +1,14 @@
-import { cn } from "../../lib/utils";
+const Card = ({ className = '', children, ...props }) => {
+  const baseStyles =
+    'rounded-lg border border-border bg-card text-card-foreground shadow-sm';
+  const classes = `${baseStyles} ${className}`;
 
-    const Card = ({ className, ...props }) => (
-            <div
-              className={cn("rounded-lg border bg-card text-card-forengroun shadown-sm",className)}
-              {...props}
-            />
-        );
+  return (
+    <div className={classes} {...props}>
+      {children}
+    </div>
+  );
+};
 
-    Card.displayName = "Card";
-    
-    export default Card;
+Card.displayName = 'Card';
+export { Card };

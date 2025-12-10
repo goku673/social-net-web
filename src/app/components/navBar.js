@@ -1,25 +1,28 @@
-// src/app/components/navBar.js
 'use client';
-import { Bell, MessageCircle, Search, Menu } from 'lucide-react';
+
+import { BellIcon } from './icons/BellIcon';
+import { MessageCircleIcon } from './icons/messageCircleIcon';
+import { SearchIcon } from './icons/searchIcon';
+import { MenuIcon } from './icons/menuIcon';
 import { Avatar } from './ui/avatar/avatar';
 import AvatarFallback from './ui/avatar/avatarFallback';
 import AvatarImage from './ui/avatar/avatarImage';
 import { Button } from './common/button';
 import { Input } from './common/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdownMenu/dropdown-menu';
+import DropdownMenu from './ui/dropdownMenu/dropdownMenu';
+import DropdownMenuContent from './ui/dropdownMenu/dropdownMenuContent';
+import DropdownMenuTrigger from './ui/dropdownMenu/dropdownMenuTrigger';
+import DropdownMenuItem from './ui/dropdownMenu/dropdownMenuItem';
+
 import {
   Sheet,
-  SheetTrigger,
   SheetContent,
+  SheetTrigger,
+  SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetHeader,
-} from './ui/sheet/sheetPremiun';
+} from './ui/sheet';
+
 import Sidebar from './sidebar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -28,7 +31,6 @@ const NavBar = () => {
   const navigate = useRouter();
   const [user, setUser] = useState(null);
 
-  // Acceder a localStorage solo en el cliente
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -37,14 +39,14 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-md top-0 z-10">
+    <nav className="bg-white shadow-md top-0 z-10 sticky">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <div>
+          <div className="flex items-center">
             <Sheet>
-              <SheetTrigger>
+              <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="mr-2 lg:hidden">
-                  <Menu className="h-5 w-5" />
+                  <MenuIcon className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
@@ -59,43 +61,62 @@ const NavBar = () => {
                 </div>
               </SheetContent>
             </Sheet>
-            <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+
+            <h1
+              className="text-xl font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
+              onClick={() => navigate.push('/socialNet')}
+            >
               SocialNet
             </h1>
           </div>
+
           <div className="hidden md:flex items-center space-x-4">
             <div className="relative">
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 type="text"
                 placeholder="Buscar..."
-                className="pl-10 w-64"
+                className="pl-8 w-64"
               />
             </div>
             <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
+              <BellIcon className="h-5 w-5" />
             </Button>
             <Button variant="ghost" size="icon">
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircleIcon className="h-5 w-5" />
             </Button>
           </div>
+
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Avatar className="cursor-pointer">
-                <AvatarImage src="https://github.com/shadcn.png" alt="Hola" />
+            <DropdownMenuTrigger>
+              <Avatar className="cursor-pointer hover:opacity-80 transition-opacity">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="Usuario"
+                />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onSelect={() =>
+                onClick={() =>
                   user?.userID && navigate.push(`/socialNet/${user.userID}`)
                 }
               >
                 Perfil
               </DropdownMenuItem>
-              <DropdownMenuItem>Configuración</DropdownMenuItem>
-              <DropdownMenuItem>Cerrar Sesión</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate.push('/settings')}>
+                Configuración
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  localStorage.removeItem('user');
+                  navigate.push('/login');
+                }}
+              >
+                Cerrar Sesión
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -1,10 +1,8 @@
-import * as SheetPrimitive from "@radix-ui/react-dialog";
-
-    const SheetTitle = ({className, ...props}) => (
-            <SheetPrimitive.Title
-              className={cn("text-lg font-semibold text-forenground", className)}
-              {...props}
-            />
-        );
-
-    export default SheetTitle;
+const SheetTitle = ({ className = '', ...props }) => (
+  <h3
+    className={`text-lg font-semibold text-gray-950 dark:text-gray-50 ${className}`}
+    {...props}
+  />
+);
+export { SheetTitle };
+SheetTitle.displayName = 'SheetTitle';
