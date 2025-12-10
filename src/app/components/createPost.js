@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { ImageIcon } from './icons/imageIcon';
-import { SmileIcon } from './icons/smileIcon';
+import { SmileIcon } from './icons/smile.Icon';
 import { XIcon } from './icons/xIcon';
 import { Button } from './common/button';
 import { Input } from './common/input';
