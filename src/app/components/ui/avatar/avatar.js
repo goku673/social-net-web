@@ -1,43 +1,25 @@
-import React from 'react'
-import { cn } from '../../lib/utils';
-import Image from 'next/image';
+'use client';
+import React, { useState, createContext } from 'react';
 
-const Avatar = React.forwardRef(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-      className
-    )}
-    {...props}
-  />
-))
-Avatar.displayName = "Avatar"
+// 1. Exportamos el Contexto para que AvatarImage lo pueda usar
+export const AvatarContext = createContext({
+  hasError: false,
+  setHasError: () => {},
+});
 
-const AvatarImage = React.forwardRef(({ className, src, alt, ...props }, ref) => (
-  <Image
-    ref={ref}
-    src={src}
-    alt={alt}
-    height={100}
-    width={100}
-    className={cn("aspect-square h-full w-full", className)}
-    {...props}
-  />
-))
-AvatarImage.displayName = "AvatarImage"
+const Avatar = ({ className = '', children, ...props }) => {
+  const [hasError, setHasError] = useState(false);
 
-const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted",
-      className
-    )}
-    {...props}
-  />
-))
-AvatarFallback.displayName = "AvatarFallback"
+  return (
+    <AvatarContext.Provider value={{ hasError, setHasError }}>
+      <div
+        className={`relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full ${className}`}
+        {...props}
+      >
+        {children}
+      </div>
+    </AvatarContext.Provider>
+  );
+};
 
-export { Avatar, AvatarImage, AvatarFallback }
-
+export { Avatar };

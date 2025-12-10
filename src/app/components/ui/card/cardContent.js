@@ -1,11 +1,13 @@
-import { cn } from "../../lib/utils";
+const CardContent = ({ className = '', children, ...props }) => {
+  const baseStyles = 'p-6 pt-0';
+  const classes = `${baseStyles} ${className}`;
 
-    const CardContent = ({ className, ...props }) => (
-            <div 
-               className={cn("p-6 pt-0", className)} {...props} 
-            />
-        );
+  return (
+    <div className={classes} {...props}>
+      {children}
+    </div>
+  );
+};
 
-    CardContent.displayName = "CardContent";
-
-    export default CardContent;
+CardContent.displayName = 'CardContent';
+export { CardContent };
