@@ -1,8 +1,9 @@
-import { Loader2, Facebook } from "lucide-react";
+import { SpinnerIcon } from './spinnerIcon'; // Asegúrate de que la ruta sea correcta
+import { FacebookIcon } from './facebookIcon';
 
 export const Icons = {
-  spinner: Loader2,
-  facebook: Facebook,
+  spinner: SpinnerIcon,
+  facebook: FacebookIcon,
   google: (props) => (
     <svg {...props} viewBox="0 0 24 24">
       <path
@@ -24,5 +25,4 @@ export const Icons = {
       <path d="M1 1h22v22H1z" fill="none" />
     </svg>
   ),
-}
-
+};
