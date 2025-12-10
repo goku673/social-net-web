@@ -1,12 +1,12 @@
-import { cn } from "../../lib/utils";
+export const CardHeader = ({ className = '', children, ...props }) => {
+  const baseStyles = 'flex flex-col space-y-1.5 p-6';
+  const classes = `${baseStyles} ${className}`;
 
-    const CardHeader = ({ className, ...props }) => (
-            <div
-              className={cn("flex flex-col space-y-1.5 p-6", className)}
-              {...props}
-            />
-       );
-    
-    CardHeader.displayName = "CardHeader";
-    
-    export default CardHeader;
+  return (
+    <div className={classes} {...props}>
+      {children}
+    </div>
+  );
+};
+
+CardHeader.displayName = 'CardHeader';

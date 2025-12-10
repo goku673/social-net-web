@@ -1,10 +1,8 @@
-import * as SheetPrimitive from "@radix-ui/react-dialog";
-
-    const SheetDescription = ({className, ...props} ) => (
-            <SheetPrimitive.Description
-              className={cn("text-sm text-muted-forenground", className)}
-              {...props}  
-            />
-        );
-
-    export default SheetDescription;    
+const SheetDescription = ({ className = '', ...props }) => (
+  <p
+    className={`text-sm text-gray-500 dark:text-gray-400 ${className}`}
+    {...props}
+  />
+);
+export { SheetDescription };
+SheetDescription.displayName = 'SheetDescription';

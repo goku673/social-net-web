@@ -1,12 +1,12 @@
-import { cn } from "../../lib/utils";
+export const CardFooter = ({ className = '', children, ...props }) => {
+  const baseStyles = 'flex items-center p-6 pt-0';
+  const classes = `${baseStyles} ${className}`;
 
-    const CardFooter = ({ className, ...props }) => (
-            <div
-              className={cn("flex items-center p-6 pt-0", className)}
-              {...props}
-            />
-    );
+  return (
+    <div className={classes} {...props}>
+      {children}
+    </div>
+  );
+};
 
-    CardFooter.displayName = "CardFooter";
-
-    export default CardFooter;
+CardFooter.displayName = 'CardFooter';

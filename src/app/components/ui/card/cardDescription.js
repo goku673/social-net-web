@@ -1,12 +1,13 @@
-import { cn } from "../../lib/utils";
+const CardDescription = ({ className = '', children, ...props }) => {
+  const baseStyles = 'text-sm text-muted-foreground';
+  const classes = `${baseStyles} ${className}`;
 
-    const CardDescription = ({ className, ...props }) => (
-            <p
-              className={cn("text-sm text-muted-foreground", className)}
-              {...props}
-            />
-        );
+  return (
+    <p className={classes} {...props}>
+      {children}
+    </p>
+  );
+};
 
-    CardDescription.displayName = "CardDescription";
-
-    export default CardDescription;
+CardDescription.displayName = 'CardDescription';
+export { CardDescription };

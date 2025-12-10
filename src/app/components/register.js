@@ -1,118 +1,165 @@
 'use client';
-import React, { useState } from 'react';
-import { Button } from './common/button';
-import { Input } from './common/input';
+
+import { useRegisterForm } from '../hooks/useRegisterForm';
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
-} from './ui/card/cardpremiun';
+} from './ui/card';
+import { Form } from './form/form';
+import { FormField } from './form/formField';
+import { Input } from './common/input';
+import { Button } from './common/button';
+import { Text } from './common/text';
+import { Link } from './common/link';
 import { Icons } from './icons/icons';
-import Link from 'next/link';
-import { inputFieldsRegister } from './utils/formUtils';
-import { useRegisterMutation } from '@/redux/auth/auth';
-import { useRouter } from 'next/navigation';
 
-const Register = () => {
-  const navigation = useRouter();
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    imagen: null,
-  });
-
-  const [register, { isLoading: registerLoading }] = useRegisterMutation();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]:
-        e.target.type === 'file' ? e.target.files[0] : e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    const data = new FormData();
-    for (const key in formData) {
-      data.append(key, formData[key]);
-    }
-    e.preventDefault();
-    //console.log(formData);
-    const response = await register(data);
-    localStorage.setItem('user', JSON.stringify(response.data));
-    //navigation.push("/");
-  };
+export default function RegisterPage() {
+  const { formik, loading } = useRegisterForm();
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white shadow-lg border border-gray-100">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center text-gray-800">
-          Únete a SocialNet
-        </CardTitle>
-        <p className="text-sm text-center text-gray-500">
-          Crea tu cuenta y conecta con amigos
-        </p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {inputFieldsRegister.map((field) => (
-            <div key={field.label} className="space-y-2">
-              <label htmlFor={field.label}>{field.label}</label>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-2xl font-bold">
+            Únete a SocialNet
+          </CardTitle>
+          <CardDescription>Crea tu cuenta y conecta con amigos</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <Form onSubmit={formik.handleSubmit}>
+            <FormField
+              label="Nombre Completo"
+              error={formik.touched.nombre && formik.errors.nombre}
+              required
+            >
               <Input
-                key={field.label}
-                id={field.label}
-                type={field.type}
-                name={field.label}
-                placeholder={field.placeholder}
-                value={formData[field.name]}
-                onChange={handleChange}
-                required
-                className="bg-gray-50 border-gray-200 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                placeholder="Juan Pérez"
+                disabled={loading}
+                className={
+                  formik.touched.nombre && formik.errors.nombre
+                    ? 'border-destructive'
+                    : ''
+                }
+                {...formik.getFieldProps('nombre')}
               />
+            </FormField>
+
+            <FormField
+              label="Correo Electrónico"
+              error={formik.touched.email && formik.errors.email}
+              required
+            >
+              <Input
+                type="email"
+                placeholder="juan@ejemplo.com"
+                disabled={loading}
+                className={
+                  formik.touched.email && formik.errors.email
+                    ? 'border-destructive'
+                    : ''
+                }
+                {...formik.getFieldProps('email')}
+              />
+            </FormField>
+
+            <FormField
+              label="Contraseña"
+              error={formik.touched.password && formik.errors.password}
+              required
+            >
+              <Input
+                type="password"
+                placeholder="••••••"
+                disabled={loading}
+                className={
+                  formik.touched.password && formik.errors.password
+                    ? 'border-destructive'
+                    : ''
+                }
+                {...formik.getFieldProps('password')}
+              />
+            </FormField>
+
+            <FormField
+              label="Confirmar Contraseña"
+              error={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              required
+            >
+              <Input
+                type="password"
+                placeholder="••••••"
+                disabled={loading}
+                className={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? 'border-destructive'
+                    : ''
+                }
+                {...formik.getFieldProps('confirmPassword')}
+              />
+            </FormField>
+
+            <FormField
+              label="Foto de Perfil (Opcional)"
+              error={formik.touched.imagen && formik.errors.imagen}
+            >
+              <Input
+                name="imagen"
+                type="file"
+                disabled={loading}
+                onChange={(event) => {
+                  formik.setFieldValue('imagen', event.currentTarget.files[0]);
+                }}
+                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+              />
+            </FormField>
+
+            <Button type="submit" className="w-full mt-2" disabled={loading}>
+              {loading ? (
+                <>
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  Registrando...
+                </>
+              ) : (
+                'Registrarse'
+              )}
+            </Button>
+          </Form>
+        </CardContent>
+
+        <CardFooter className="flex flex-col space-y-4">
+          <div className="relative w-full">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
             </div>
-          ))}
-          <Button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
-            disabled={registerLoading}
-          >
-            {registerLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {registerLoading ? 'Registrando...' : 'Registrarse'}
-          </Button>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col space-y-4">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-gray-200" />
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                O regístrate con
+              </span>
+            </div>
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">
-              O regístrate con
-            </span>
-          </div>
-        </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" disabled={loading}>
             <Icons.google className="mr-2 h-4 w-4" />
             Google
           </Button>
-        </div>
-        <p className="text-center text-sm text-gray-600">
-          ¿Ya tienes una cuenta?{' '}
-          <Link href="/" className="text-blue-600 hover:underline font-medium">
-            Inicia sesión
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
-  );
-};
 
-export default Register;
+          <div className="text-center">
+            <Text variant="muted" className="inline mr-1">
+              ¿Ya tienes una cuenta?
+            </Text>
+            <Link href="/" className="font-medium">
+              Inicia sesión
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
