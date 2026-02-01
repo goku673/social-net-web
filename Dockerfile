@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
+# Activar modo standalone para Docker
+ENV NEXT_OUTPUT_STANDALONE=true
 RUN pnpm build
 
 # ETAP 2: Serve the application
