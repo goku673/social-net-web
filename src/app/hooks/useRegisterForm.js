@@ -7,21 +7,53 @@ export const useRegisterForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // Esquema de validación
+  // Esquema de validación mejorado
   const validationSchema = Yup.object({
     nombre: Yup.string()
-      .min(2, 'El nombre es muy corto')
+      .min(2, 'El nombre debe tener al menos 2 caracteres')
+      .max(50, 'El nombre no puede exceder 50 caracteres')
+      .matches(
+        /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+        'El nombre solo puede contener letras y espacios'
+      )
       .required('El nombre es obligatorio'),
     email: Yup.string()
-      .email('Email inválido')
+      .email('Por favor ingresa un email válido')
+      .matches(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        'El formato del email no es válido'
+      )
       .required('El email es requerido'),
     password: Yup.string()
-      .min(6, 'Mínimo 6 caracteres')
+      .min(8, 'La contraseña debe tener al menos 8 caracteres')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        'La contraseña debe contener al menos una mayúscula, una minúscula y un número'
+      )
       .required('La contraseña es requerida'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden')
       .required('Debes confirmar tu contraseña'),
-    imagen: Yup.mixed().nullable(),
+    imagen: Yup.mixed()
+      .nullable()
+      .test(
+        'fileSize',
+        'La imagen es demasiado grande. Máximo 5MB',
+        (value) => {
+          if (!value) return true; // Es opcional
+          return value.size <= 5 * 1024 * 1024; // 5MB
+        }
+      )
+      .test(
+        'fileType',
+        'Solo se permiten imágenes (JPG, PNG, GIF)',
+        (value) => {
+          if (!value) return true; // Es opcional
+          return ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(
+            value.type
+          );
+        }
+      ),
   });
 
   const formik = useFormik({

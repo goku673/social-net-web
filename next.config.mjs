@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. CORREGIDO: 'output' bien escrito (para Docker)
-  output: 'standalone',
+  // Solo usar standalone cuando se especifique la variable de entorno o en Docker
+  // Esto evita problemas de permisos con symlinks en Windows
+  ...(process.env.NEXT_OUTPUT_STANDALONE === 'true' && {
+    output: 'standalone',
+  }),
 
   images: {
     // 2. CORREGIDO: Usamos remotePatterns en lugar de domains

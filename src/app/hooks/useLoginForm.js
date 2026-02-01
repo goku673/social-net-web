@@ -9,9 +9,14 @@ export const useLoginForm = () => {
   const [generalError, setGeneralError] = useState('');
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Email inválido')
+      .email('Por favor ingresa un email válido')
+      .matches(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        'El formato del email no es válido'
+      )
       .required('El email es requerido'),
     password: Yup.string().required('La contraseña es requerida'),
+    rememberMe: Yup.boolean(),
   });
 
   const formik = useFormik({

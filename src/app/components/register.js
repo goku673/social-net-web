@@ -83,6 +83,11 @@ export default function RegisterPage() {
                 }
                 {...formik.getFieldProps('password')}
               />
+              {!formik.errors.password && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Mínimo 8 caracteres, incluye mayúscula, minúscula y número
+                </p>
+              )}
             </FormField>
 
             <FormField
@@ -113,12 +118,21 @@ export default function RegisterPage() {
               <Input
                 name="imagen"
                 type="file"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
                 disabled={loading}
                 onChange={(event) => {
-                  formik.setFieldValue('imagen', event.currentTarget.files[0]);
+                  const file = event.currentTarget.files[0];
+                  formik.setFieldValue('imagen', file);
+                  formik.setFieldTouched('imagen', true);
                 }}
+                onBlur={() => formik.setFieldTouched('imagen', true)}
                 className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
               />
+              {!formik.errors.imagen && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Formatos permitidos: JPG, PNG, GIF. Máximo 5MB
+                </p>
+              )}
             </FormField>
 
             <Button type="submit" className="w-full mt-2" disabled={loading}>
