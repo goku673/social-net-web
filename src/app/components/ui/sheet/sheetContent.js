@@ -1,9 +1,9 @@
 'use client';
 import { useContext } from 'react';
-// Ahora esto funcionará correctamente
+
 import { SheetContext } from './sheet';
 import { SheetOverlay } from './sheetOverlay';
-import { XIcon } from '../../icons/xIcon'; // Asegúrate de que la ruta a tu icono sea correcta
+import { XIcon } from '../../icons/xIcon';
 
 const SheetContent = ({
   side = 'right',
@@ -19,11 +19,6 @@ const SheetContent = ({
     left: 'inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm',
     right: 'inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm',
   };
-
-  // Clases base + animación simple con transición de posición/opacidad si quisieras
-  // Nota: Para que la transición de entrada/salida se vea suave sin librerías externas
-  // como Framer Motion o Headless UI, se requiere un CSS más complejo o renderizado condicional inteligente.
-  // Aquí usamos renderizado condicional simple (if !open return null).
 
   const baseClasses = `fixed z-50 gap-4 bg-white p-6 shadow-lg transition ease-in-out duration-300 dark:bg-gray-950 ${variants[side]}`;
 

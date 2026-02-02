@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, createContext, useContext } from 'react';
 
-// --- CORRECCIÓN: Agregamos 'export' aquí ---
 export const SheetContext = createContext({
   open: false,
   setOpen: () => {},
